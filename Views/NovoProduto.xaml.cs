@@ -22,10 +22,13 @@ public partial class NovoProduto : ContentPage
 
 				Preco = Convert.ToDouble(txt_preco.Text),
 
-			};
+                Categoria = txt_categoria.Text
+
+            };
 
 			await App.Db.Insert(p);
 			await DisplayAlertAsync("Sucesso!", "Registro Inserido", "OK");
+			await Navigation.PopAsync();
 
 		}catch(Exception ex)
 		{

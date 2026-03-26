@@ -5,6 +5,7 @@ namespace MauiAppMinhasCompras.Models
     public class Produto
     {
         string _descricao;
+        string _categoria;
         double _quantidade;
         double _preco;
         [PrimaryKey, AutoIncrement]
@@ -20,6 +21,18 @@ namespace MauiAppMinhasCompras.Models
             _descricao  = value;
             }
         }
+        public string Categoria
+        {
+            get => _categoria;
+            set
+            {
+                if (value == null)
+                {
+                    throw new Exception("Por favor, preencha a Categoria");
+                }
+                _categoria = value;
+            }
+        }
 
         public double Quantidade
         {
@@ -28,9 +41,9 @@ namespace MauiAppMinhasCompras.Models
             {
                 if (value < 0)
                 {
-                    throw new Exception("Por favor, preencha a Quantidade");
+                    throw new Exception("Quantidade não pode ser negativa");
                 }
-                _quantidade = 0;
+                _quantidade = value;
             }
         }
 
@@ -41,12 +54,18 @@ namespace MauiAppMinhasCompras.Models
             {
                 if (value < 0)
                 {
-                    throw new Exception("Por favor, preencha o Preço");
+                    throw new Exception("Preço não pode ser negativo");
                 }
-                _preco = 0;
+                _preco = value;
             }
         }
 
         public double Total { get => Quantidade*Preco ; }
+        
+    }
+    public class TotalCategoria
+    {
+        public string Categoria { get; set; }
+        public double Totalc { get; set; }
     }
 }

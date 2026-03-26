@@ -1,4 +1,5 @@
 ﻿using MauiAppMinhasCompras.Models;
+using Microsoft.Maui.Controls.Shapes;
 using SQLite;
 
 namespace MauiAppMinhasCompras.Helpers
@@ -18,10 +19,10 @@ namespace MauiAppMinhasCompras.Helpers
 
         public Task<List<Produto>> Update(Produto p) 
         {
-            string sql = "UPDATE Produto SET Descricao=?, Quantidade=?, Preco=? WHERE Id=?";
+            string sql = "UPDATE Produto SET Descricao=?, Quantidade=?, Preco=?, Categoria=? WHERE Id=?";
 
             return _conn.QueryAsync<Produto>(
-                sql, p.Descricao, p.Quantidade, p.Preco, p.Id
+                sql, p.Descricao, p.Quantidade, p.Preco,p.Categoria, p.Id
             );
         }
         public Task<int> Delete(int id)
@@ -34,15 +35,31 @@ namespace MauiAppMinhasCompras.Helpers
             return _conn.Table<Produto>().ToListAsync();
         }
 
-        public Task<List<Produto>> Search(string q)
+        public Task<List<Produto>> Search_desc(string q)
         {
-            string sql = "Select * FROM Produto WHERE descricao LIKE '%" + q + "%'";
-            return _conn.QueryAsync<Produto>(sql
+            string sql = "Select * FROM Produto WHERE descricao LIKE '%" + q + "%' ";
+            return _conn.QueryAsync<Produto>(sql);
 
-                
-                );
+            
+
         }
 
+        public Task<List<Produto>> Search_cat(string c)
+        {
+            string sql = "Select * FROM Produto WHERE categoria Like '%" + c + "%'  ";
+            return _conn.QueryAsync<Produto>(sql);
 
+
+
+        }
+        public Task<List<TotalCategoria>> TotalPorCategorias()
+        {
+            string sql = @"SELECT categoria, 
+                          SUM(quantidade * preco) AS Totalc
+                   FROM Produto
+                   GROUP BY categoria";
+
+            return _conn.QueryAsync<TotalCategoria>(sql);
+        }
     }
 }

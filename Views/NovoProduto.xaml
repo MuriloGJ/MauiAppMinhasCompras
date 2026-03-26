@@ -16,6 +16,9 @@
                 
         <Label Text="Preço Unitário"/>
         <Entry x:Name="txt_preco" Keyboard="Numeric"/>
+        
+        <Label Text="Categoria do Produto:" />
+        <Entry x:Name="txt_categoria"/>
 
     </VerticalStackLayout>
 </ContentPage>
