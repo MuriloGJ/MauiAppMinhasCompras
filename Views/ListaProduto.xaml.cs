@@ -11,10 +11,16 @@ public partial class ListaProduto : ContentPage
         InitializeComponent();
         lst_produtos.ItemsSource = lista;
     }
+    ObservableCollection<TotalCategoria> listac = new ObservableCollection<TotalCategoria>();
+    public void ListaProdutoC()
+    {
+        InitializeComponent();
+        lst_produtos.ItemsSource = listac;
+    }
     protected async override void OnAppearing()
     {
 
-        
+
         try
         {
             lista.Clear();
@@ -39,8 +45,6 @@ public partial class ListaProduto : ContentPage
             DisplayAlertAsync("Ops", ex.Message, "OK");
         }
     }
-
-
     private async void txt_search_TextChanged(object sender, TextChangedEventArgs e)
     {
         try
@@ -49,7 +53,7 @@ public partial class ListaProduto : ContentPage
 
             txt_categoria.IsEnabled = string.IsNullOrWhiteSpace(q);
 
-           
+
             if (!string.IsNullOrWhiteSpace(q))
                 txt_categoria.Text = "";
 
@@ -62,7 +66,7 @@ public partial class ListaProduto : ContentPage
         }
         catch (Exception ex)
         {
-           await DisplayAlertAsync("Ops", ex.Message, "OK");
+            await DisplayAlertAsync("Ops", ex.Message, "OK");
         }
         finally
         {
@@ -78,7 +82,7 @@ public partial class ListaProduto : ContentPage
 
             txt_search.IsEnabled = string.IsNullOrWhiteSpace(c);
 
-            
+
             if (!string.IsNullOrWhiteSpace(c))
                 txt_search.Text = "";
 
@@ -97,11 +101,7 @@ public partial class ListaProduto : ContentPage
         {
             lst_produtos.IsRefreshing = false;
         }
-
     }
-
-
-
     private void ToolbarItem_somar(object sender, EventArgs e)
     {
         double soma = lista.Sum(i => i.Total);
@@ -110,9 +110,6 @@ public partial class ListaProduto : ContentPage
         DisplayAlertAsync("Total dos Produtos", msg, "OK");
 
     }
-
-    
-
     private async void MenuItem_remover(object sender, EventArgs e)
     {
         try
@@ -143,10 +140,9 @@ public partial class ListaProduto : ContentPage
             await DisplayAlertAsync("Ops", ex.Message, "OK");
         }
     }
-
     private void lst_produtos_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        try 
+        try
         {
             Produto p = e.SelectedItem as Produto;
 
@@ -160,37 +156,39 @@ public partial class ListaProduto : ContentPage
             DisplayAlertAsync("Ops", ex.Message, "OK");
         }
     }
-
     private async void lst_produtos_Refreshing(object sender, EventArgs e)
     {
-        try { 
-        lista.Clear();
+        try
+        {
+            lista.Clear();
 
-        List<Produto> tmp = await App.Db.GetAll();
-        tmp.ForEach(i => lista.Add(i));
-    }
+            List<Produto> tmp = await App.Db.GetAll();
+            tmp.ForEach(i => lista.Add(i));
+        }
         catch (Exception ex)
         {
             await DisplayAlertAsync("Ops", ex.Message, "OK");
         }
         finally
-        { 
+        {
             lst_produtos.IsRefreshing = false;
         }
     }
-
     private async void ToolbarItem_categoria(object sender, EventArgs e)
     {
         try
         {
-            var lista = await App.Db.TotalPorCategorias();
 
-            string msg = "";
 
-            foreach (var item in lista)
-            {
-                msg += $"{item.Categoria}: {item.Totalc:C}\n";
-            }
+
+            List<TotalCategoria> tmp = await App.Db.TotalPorCategorias();
+
+            tmp.ForEach(i => listac.Add(i));
+
+            string msg = string.Join("\n", tmp.Select(i =>
+     $"{i.Categoria}: {i.Totalc:C}"
+ ));
+
 
             await DisplayAlertAsync("Totais por Categoria", msg, "OK");
         }
@@ -198,5 +196,26 @@ public partial class ListaProduto : ContentPage
         {
             await DisplayAlertAsync("Erro", ex.Message, "OK");
         }
+        /*finally
+        {
+            lst_produtos.IsRefreshing = false;
+        }*/
+
+        /* var lista = await App.Db.TotalPorCategorias();
+
+         string msg = "";
+
+         foreach (var item in lista)
+         {
+             msg += $"{item.Categoria}: {item.Totalc:C}\n";
+    }
+
+        await DisplayAlertAsync("Totais por Categoria", msg, "OK");
+    }
+    catch (Exception ex)
+    {
+        await DisplayAlertAsync("Erro", ex.Message, "OK");
+    }
+}*/
     }
 }
