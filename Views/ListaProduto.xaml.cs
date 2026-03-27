@@ -6,16 +6,13 @@ namespace MauiAppMinhasCompras.Views;
 public partial class ListaProduto : ContentPage
 {
     ObservableCollection<Produto> lista = new ObservableCollection<Produto>();
+    ObservableCollection<TotalCategoria> listac = new ObservableCollection<TotalCategoria>();
+
     public ListaProduto()
     {
         InitializeComponent();
         lst_produtos.ItemsSource = lista;
-    }
-    ObservableCollection<TotalCategoria> listac = new ObservableCollection<TotalCategoria>();
-    public void ListaProdutoC()
-    {
-        InitializeComponent();
-        lst_produtos.ItemsSource = listac;
+    
     }
     protected async override void OnAppearing()
     {
@@ -219,3 +216,4 @@ public partial class ListaProduto : ContentPage
 }*/
     }
 }
+    
